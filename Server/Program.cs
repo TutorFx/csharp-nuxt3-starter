@@ -15,6 +15,9 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => new { 
+    teste = "blablabla",
+    teste2 = "blablabla2"
+});
 
 app.Run();

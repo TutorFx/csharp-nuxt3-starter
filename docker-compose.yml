@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  web:
+    container_name: 'backend'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8090:80'
+    depends_on:
+      - postgres
+    networks:
+      - project-network
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_ENVIRONMENT=Development # Consider setting this based on your docker-compose environment
+
+  postgres:
+    image: 'postgres:14.7-alpine'
+    container_name: project-postgresql
+    restart: unless-stopped # Ensures the database container restarts automatically
+    environment:
+      - POSTGRES_PASSWORD=mypass
+      - POSTGRES_USER=postgres # Add default user
+      - POSTGRES_DB=mydb # Add default database 
+    volumes:
+      - project-postgresql-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - project-network
+
+volumes:
+  project-postgresql-data: # Named volume for better data persistence 
+
+networks:
+  project-network:
+    driver: bridge
